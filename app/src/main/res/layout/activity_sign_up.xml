@@ -26,9 +26,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:text="Registrarse"
                 android:textSize="36sp"
                 android:textAlignment="center"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold"/>
 
             <EditText
@@ -40,7 +41,7 @@
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"
-                android:hint="Email"/>
+                android:hint="Correo (institucional)"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -51,21 +52,28 @@
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"
-                android:hint="Password"/>
+                android:hint="Contraseña"/>
 
-            <Button
+            <com.apachat.loadingbutton.core.customViews.CircularProgressButton
+                android:id="@+id/signup_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="SIGN UP"
-                android:id="@+id/signup_button"
+                android:text="Continuar"
+                android:textColor="@color/white"
                 android:textSize="18sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/violet"
+                app:spinning_bar_color="@color/white"
+                app:spinning_bar_width="4dp"
+                app:spinning_bar_padding="4dp"
                 android:layout_marginTop="30dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/loginRedirectText"
-                android:text="Already an user? Login"
+                android:text="Ya estas registrado? Inicia sesión"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:layout_marginTop="10dp"

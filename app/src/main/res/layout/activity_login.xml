@@ -21,14 +21,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="24dp"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="Iniciar Sesión"
                 android:textSize="36sp"
                 android:textAlignment="center"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold"/>
 
             <EditText
@@ -39,7 +41,7 @@
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"
-                android:hint="Email"
+                android:hint="Correo"
                 android:inputType="textEmailAddress"/>
 
             <EditText
@@ -51,21 +53,28 @@
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
                 android:textColor="@color/black"
-                android:hint="Password"/>
+                android:hint="Contraseña"/>
 
-            <Button
+            <com.apachat.loadingbutton.core.customViews.CircularProgressButton
+                android:id="@+id/login_button"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="LOGIN"
-                android:id="@+id/login_button"
+                android:text="Continuar"
+                android:textColor="@color/white"
                 android:textSize="18sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/violet"
+                app:spinning_bar_color="@color/white"
+                app:spinning_bar_width="4dp"
+                app:spinning_bar_padding="4dp"
                 android:layout_marginTop="30dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/signupRedirectText"
-                android:text="Not yet registered? Sign Up"
+                android:text="Aun no estas registrado? Registrate"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 android:layout_marginTop="10dp"
