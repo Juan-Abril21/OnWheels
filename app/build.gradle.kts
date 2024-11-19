@@ -33,7 +33,11 @@ android {
 }
 
 dependencies {
-
+    implementation (libs.firebase.firestore)
+    implementation (libs.okhttp)
+    implementation(libs.gson)
+    implementation(libs.loadingbutton.android)
+    implementation (libs.material.v1110)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

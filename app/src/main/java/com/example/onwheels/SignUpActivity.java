@@ -1,8 +1,11 @@
 package com.example.onwheels;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.apachat.loadingbutton.core.customViews.CircularProgressButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private EditText signUpEmail, signUpPassword;
-    private Button signUpButton;
+    private CircularProgressButton signUpButton;
     private TextView loginRedirectText;
 
     @Override
@@ -36,26 +40,44 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String user = signUpEmail.getText().toString().trim();
-                String pass = signUpPassword.getText().toString().trim();
-                if (user.isEmpty()) {
-                    signUpEmail.setError("Email is required");
-                }
-                if (pass.isEmpty()) {
-                    signUpPassword.setError("Password is required");
-                } else {
-                    auth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(SignUpActivity.this, "SignUp Succesfull", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
-                            } else {
-                                Toast.makeText(SignUpActivity.this, "SignUp Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String user = signUpEmail.getText().toString().trim();
+                        String pass = signUpPassword.getText().toString().trim();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                        if (user.isEmpty()) {
+                            signUpEmail.setError("Email is required");
+                        } else if (!user.endsWith("@unisabana.edu.co")) {
+                            signUpEmail.setError("Email must be a @unisabana.edu.co address");
+                        } else if (pass.isEmpty()) {
+                            signUpPassword.setError("Password is required");
+                        } else {
+                            signUpButton.startAnimation();
+                            auth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(SignUpActivity.this, "SignUp Successful", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                                    } else {
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                recreate();
+                                            }
+                                        }, 1);
+                                        Toast.makeText(SignUpActivity.this, "SignUp Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
-                    });
-                }
+                    }
+                }, 1);
             }
         });
         loginRedirectText.setOnClickListener(new View.OnClickListener() {
