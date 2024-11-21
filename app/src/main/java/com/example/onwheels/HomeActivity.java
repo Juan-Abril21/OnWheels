@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -21,6 +22,7 @@ import com.google.android.material.button.MaterialButton;
 public class HomeActivity extends AppCompatActivity {
     private Button previous_button;
     private MaterialButton create_wheels_button, get_wheels_button;
+    private ImageView profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +40,13 @@ public class HomeActivity extends AppCompatActivity {
         Window window = getWindow();
         window.setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
 
+        profile_image = findViewById(R.id.profile_image);
+        profile_image.setOnClickListener(view -> {
+            startActivity(new Intent(HomeActivity.this, AccountInfoActivity.class));
+        });
         create_wheels_button.setOnClickListener(view -> {
             String usuario = SessionManager.getInstance(HomeActivity.this).getUsername();
-            Intent intent = new Intent(HomeActivity.this, CreateWheelsActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(HomeActivity.this, CreateWheelsActivity.class));
         });
         get_wheels_button.setOnClickListener(view -> {
             startActivity(new Intent(HomeActivity.this, GetWheelsActivity.class));

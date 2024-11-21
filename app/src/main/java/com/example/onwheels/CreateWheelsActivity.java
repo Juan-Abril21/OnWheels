@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ public class CreateWheelsActivity extends AppCompatActivity {
     private List<Place> placeListDestination = new ArrayList<>();
     private Button previous_button;
     private EditText placa_edit_text;
+    private NumberPicker cupos_number_picker;
     private DatePickerDialog datePickerDialog;
     private Button date_picker_button;
     private String selectedPlace = "";
@@ -74,6 +76,10 @@ public class CreateWheelsActivity extends AppCompatActivity {
         rvPlacesDestination = findViewById(R.id.rvPlacesDestination);
         timeButton = findViewById(R.id.time_button);
         create_wheels_button = findViewById(R.id.create_wheels_button);
+        cupos_number_picker = findViewById(R.id.cupos_number_picker);
+        cupos_number_picker.setMinValue(1);
+        cupos_number_picker.setMaxValue(7);
+        cupos_number_picker.setWrapSelectorWheel(true);
         previous_button.setOnClickListener(view -> {
             startActivity(new Intent(CreateWheelsActivity.this, HomeActivity.class));
         });
@@ -112,12 +118,12 @@ public class CreateWheelsActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        btnSearch.startAnimation();
                         String query = etSearch.getText().toString();
                         if (!query.isEmpty()) {
-                            btnSearch.startAnimation();
                             searchPlaces(query, true);
                         } else {
-                            btnSearch.stopAnimation();
+                            btnSearch.revertAnimation();
                             Toast.makeText(CreateWheelsActivity.this, "Por favor, ingresa un lugar", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -132,12 +138,12 @@ public class CreateWheelsActivity extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        btnSearchDestination.startAnimation();
                         String query = etSearchDestination.getText().toString();
                         if (!query.isEmpty()) {
-                            btnSearchDestination.startAnimation();
                             searchPlaces(query, false);
                         } else {
-                            btnSearchDestination.stopAnimation();
+                            btnSearchDestination.revertAnimation();
                             Toast.makeText(CreateWheelsActivity.this, "Por favor, ingresa un lugar", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -152,6 +158,7 @@ public class CreateWheelsActivity extends AppCompatActivity {
                 String hora = timeButton.getText().toString();
                 String puntoInicio = etSearch.getText().toString();
                 String puntoLlegada = etSearchDestination.getText().toString();
+                int cupos = cupos_number_picker.getValue();
                 Intent intent = getIntent();
                 String usuario = SessionManager.getInstance(CreateWheelsActivity.this).getUsername();
 
@@ -160,16 +167,22 @@ public class CreateWheelsActivity extends AppCompatActivity {
                         if (!hora.isEmpty()) {
                             if (!puntoInicio.isEmpty()) {
                                 if (!puntoLlegada.isEmpty()) {
-                                    create_wheels_button.startAnimation();
-                                    Wheels ruta = new Wheels(placa, fecha, hora, puntoInicio, puntoLlegada, usuario);
-                                    db.collection("wheels").add(ruta);
-                                    intent = new Intent(CreateWheelsActivity.this, InfoCreationActivity.class);
-                                    intent.putExtra("placa", placa);
-                                    intent.putExtra("fecha", fecha);
-                                    intent.putExtra("hora", hora);
-                                    intent.putExtra("puntoInicio", puntoInicio);
-                                    intent.putExtra("puntoLlegada", puntoLlegada);
-                                    startActivity(intent);
+                                    if (!cupos_number_picker.toString().isEmpty()) {
+                                        create_wheels_button.startAnimation();
+                                        Wheels ruta = new Wheels(placa, fecha, hora, puntoInicio, puntoLlegada, usuario, cupos);
+                                        db.collection("wheels").add(ruta);
+                                        intent = new Intent(CreateWheelsActivity.this, InfoCreationActivity.class);
+                                        intent.putExtra("placa", placa);
+                                        intent.putExtra("fecha", fecha);
+                                        intent.putExtra("hora", hora);
+                                        intent.putExtra("puntoInicio", puntoInicio);
+                                        intent.putExtra("puntoLlegada", puntoLlegada);
+                                        intent.putExtra("cupos", cupos);
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(CreateWheelsActivity.this, "Por favor, ingresa un número de cupos", Toast.LENGTH_SHORT).show();
+                                        create_wheels_button.revertAnimation();
+                                    }
                                 } else {
                                     Toast.makeText(CreateWheelsActivity.this, "Por favor, ingresa un punto de llegada", Toast.LENGTH_SHORT).show();
                                     create_wheels_button.revertAnimation();

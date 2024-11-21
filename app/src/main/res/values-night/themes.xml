@@ -2,7 +2,6 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.OnWheels" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:statusBarColor">@color/blue</item>
     </style>
 </resources>

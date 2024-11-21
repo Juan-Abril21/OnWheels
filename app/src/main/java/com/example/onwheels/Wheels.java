@@ -7,17 +7,18 @@ public class Wheels {
     private String inicio;
     private String fin;
     private String usuario;
+    private Integer cupos;
 
-    // Constructor vacío requerido por Firestore
     public Wheels() {}
 
-    public Wheels(String placa, String fecha, String hora, String inicio, String fin, String usuario) {
+    public Wheels(String placa, String fecha, String hora, String inicio, String fin, String usuario, Integer cupos) {
         this.placa = placa;
         this.fecha = fecha;
         this.hora = hora;
         this.inicio = inicio;
         this.fin = fin;
         this.usuario = usuario;
+        this.cupos = cupos;
     }
 
     // Getters y setters
@@ -45,6 +46,10 @@ public class Wheels {
         return usuario;
     }
 
+    public Integer getCupos() {
+        return cupos;
+    }
+
     public void setHora(String hora) {
         this.hora = hora;
     }
@@ -63,6 +68,10 @@ public class Wheels {
 
     public void setFin(String fin) {
         this.fin = fin;
+    }
+
+    public void setCupos(Integer cupos) {
+        this.cupos = cupos;
     }
 
     public void setUsuario(String usuario) {
