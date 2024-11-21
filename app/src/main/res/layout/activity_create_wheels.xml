@@ -11,7 +11,8 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/blue">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,33 +29,43 @@
                 android:contentDescription="Previous"
                 android:padding="10dp"
                 app:iconSize="30dp"
+                android:layout_marginLeft="16dp"
                 app:icon="@drawable/ic_previous"
                 app:iconTint="@android:color/white" />
 
             <ImageView
                 android:id="@+id/logo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
                 android:contentDescription="Logo"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/logowhite"
+                android:layout_marginTop="10dp"
                 android:layout_centerInParent="true" />
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="Profile Image"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_user_photo" />
+
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="0dp"
-            app:cardCornerRadius="20dp"
             app:cardElevation="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:background="@drawable/rounded_top_corners"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -68,16 +79,13 @@
                     android:id="@+id/placa_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="40dp"
+                    android:background="@drawable/rounded_editext"
+                    android:padding="12dp"
                     android:hint="Placa"
-                    android:padding="16dp"
-                    android:textSize="18sp"
-                    app:backgroundTint="@color/violet"
-                    app:cornerRadius="15dp"
-                    app:elevation="4dp"
-                    app:icon="@drawable/ic_search"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <Button
                     android:id="@+id/date_picker_button"
@@ -96,7 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="40dp"
-                    android:backgroundTint="@color/violet"
+                    android:backgroundTint="@color/blue"
                     android:onClick="popTimePicker"
                     android:text="SELECT TIME"
                     android:textColor="@color/white"
@@ -106,29 +114,27 @@
                     android:id="@+id/etSearch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="40dp"
+                    android:background="@drawable/rounded_editext"
+                    android:padding="12dp"
                     android:hint="Punto de inicio"
-                    android:padding="16dp"
-                    android:textSize="18sp"
-                    app:backgroundTint="@color/violet"
-                    app:cornerRadius="15dp"
-                    app:elevation="4dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <com.apachat.loadingbutton.core.customViews.CircularProgressButton
                     android:id="@+id/btnSearch"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/violet"
+                    android:backgroundTint="@color/blue"
                     android:text="Buscar"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:spinning_bar_color="@color/white"
                     app:spinning_bar_padding="4dp"
-                    app:spinning_bar_width="4dp" />
+                    app:spinning_bar_width="4dp"
+                    app:initialCornerAngle="30dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPlaces"
@@ -142,29 +148,27 @@
                     android:id="@+id/etSearchDestination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="40dp"
+                    android:background="@drawable/rounded_editext"
+                    android:padding="12dp"
                     android:hint="Punto de llegada"
-                    android:padding="16dp"
-                    android:textSize="18sp"
-                    app:backgroundTint="@color/violet"
-                    app:cornerRadius="15dp"
-                    app:elevation="4dp"
-                    app:icon="@drawable/ic_add"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
 
                 <com.apachat.loadingbutton.core.customViews.CircularProgressButton
                     android:id="@+id/btnSearchDestination"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/violet"
+                    android:backgroundTint="@color/blue"
                     android:text="Buscar"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:spinning_bar_color="@color/white"
                     app:spinning_bar_padding="4dp"
-                    app:spinning_bar_width="4dp" />
+                    app:spinning_bar_width="4dp"
+                    app:initialCornerAngle="30dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPlacesDestination"
@@ -174,18 +178,36 @@
                     android:layout_marginBottom="16dp"
                     android:layout_weight="1" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cupos"
+                    android:layout_marginBottom="16dp"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
+
+                <NumberPicker
+                    android:id="@+id/cupos_number_picker"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="20dp"
+                    app:backgroundTint="@color/violet"
+                    app:elevation="4dp" />
+
                 <com.apachat.loadingbutton.core.customViews.CircularProgressButton
                     android:id="@+id/create_wheels_button"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:backgroundTint="@color/violet"
+                    android:backgroundTint="@color/blue"
+                    android:layout_marginBottom="16dp"
                     android:text="Crear"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     app:spinning_bar_color="@color/white"
                     app:spinning_bar_padding="4dp"
-                    app:spinning_bar_width="4dp"/>
+                    app:spinning_bar_width="4dp"
+                    app:initialCornerAngle="30dp"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

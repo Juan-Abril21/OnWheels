@@ -47,6 +47,14 @@
             android:name=".GetWheelsActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".InfoGetWheelsActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".AccountInfoActivity"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

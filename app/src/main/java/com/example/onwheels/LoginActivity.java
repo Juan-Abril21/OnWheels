@@ -6,26 +6,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Patterns;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.apachat.loadingbutton.core.customViews.CircularProgressButton;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
     private EditText loginEmail, loginPassword;
     private TextView signUpRedirectText;
     private CircularProgressButton loginButton;
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         loginButton = findViewById(R.id.login_button);
@@ -54,15 +59,63 @@ public class LoginActivity extends AppCompatActivity {
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                         if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                            String usuario = email.substring(0, email.indexOf('@'));
+                            final String defaultUsername = email.substring(0, email.indexOf('@'));
                             if (!pass.isEmpty()) {
                                 loginButton.startAnimation();
                                 auth.signInWithEmailAndPassword(email, pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                     @Override
                                     public void onSuccess(AuthResult authResult) {
-                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                        SessionManager.getInstance(LoginActivity.this).setUsername(usuario);
-                                        startActivity(intent);
+                                        String userId = authResult.getUser().getUid();
+
+                                        // Verificar si el usuario existe en Firestore
+                                        db.collection("users").document(userId).get()
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                        String username;
+                                                        if (documentSnapshot.exists()) {
+                                                            // Si existe, usar el username guardado
+                                                            username = documentSnapshot.getString("username");
+                                                        } else {
+                                                            // Si no existe, guardar nuevo username
+                                                            username = defaultUsername;
+                                                            Map<String, Object> user = new HashMap<>();
+                                                            user.put("username", username);
+                                                            user.put("reservations", new ArrayList<>());
+
+                                                            db.collection("users").document(userId)
+                                                                    .set(user)
+                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(LoginActivity.this,
+                                                                                    "Error saving username: " + e.getMessage(),
+                                                                                    Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                        }
+
+                                                        // Guardar username en SessionManager y continuar
+                                                        SessionManager.getInstance(LoginActivity.this).setUsername(username);
+                                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                                        startActivity(intent);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Handler handler = new Handler();
+                                                        handler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                recreate();
+                                                            }
+                                                        }, 1);
+                                                        Toast.makeText(LoginActivity.this,
+                                                                "Error checking username: " + e.getMessage(),
+                                                                Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
@@ -74,7 +127,9 @@ public class LoginActivity extends AppCompatActivity {
                                                 recreate();
                                             }
                                         }, 1);
-                                        Toast.makeText(LoginActivity.this, "Login Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this,
+                                                "Login Failed: " + e.getMessage(),
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             } else {

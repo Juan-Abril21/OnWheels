@@ -1,11 +1,14 @@
 package com.example.onwheels;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +23,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class GetWheelsActivity extends AppCompatActivity {
     private Button previous_button;
     private CircularProgressButton btnUpdate;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db;
     private CardAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -34,74 +38,129 @@ public class GetWheelsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_wheels);
 
+        // Inicializar Firestore
+        db = FirebaseFirestore.getInstance();
+
+        // Inicializar vistas
+        initializeViews();
+
+        // Configurar RecyclerView
+        setupRecyclerView();
+
+        // Configurar botones
+        setupButtons();
+
+        // Cargar datos iniciales
+        loadData();
+    }
+
+    private void initializeViews() {
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.progressBar);
         previous_button = findViewById(R.id.previous_button);
         btnUpdate = findViewById(R.id.btnUpdate);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setVisibility(View.GONE);
         btnUpdate.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+    }
 
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CardAdapter(new ArrayList<>());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void setupButtons() {
         previous_button.setOnClickListener(view -> {
             startActivity(new Intent(GetWheelsActivity.this, HomeActivity.class));
+            finish();
         });
 
-        ArrayList<CardData> cardList = new ArrayList<>();
-        adapter = new CardAdapter(cardList);
-        recyclerView.setAdapter(adapter);
-
-        loadData(cardList);
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        btnUpdate.startAnimation();
-                        loadData(cardList);
-                    }
-                }, 1);
-            }
+        btnUpdate.setOnClickListener(view -> {
+            btnUpdate.startAnimation();
+            loadData();
         });
     }
 
-    private void loadData(ArrayList<CardData> cardList) {
-        db.collection("wheels").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    cardList.clear();
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        String placa = doc.getString("placa");
-                        String fecha = doc.getString("fecha");
-                        String hora = doc.getString("hora");
-                        String inicio = doc.getString("inicio");
-                        String fin = doc.getString("fin");
-                        String usuario = doc.getString("usuario");
+    private void loadData() {
+        db.collection("wheels")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        try {
+                            ArrayList<CardData> cardList = new ArrayList<>();
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                String documentId = doc.getId(); 
+                                String placa = doc.getString("placa");
+                                String fecha = doc.getString("fecha");
+                                String hora = doc.getString("hora");
+                                String inicio = doc.getString("inicio");
+                                String fin = doc.getString("fin");
+                                String usuario = doc.getString("usuario");
 
-                        CardData card = new CardData("Ruta de " + usuario, "Hora: " + hora,
-                                "Placa: " + placa, "Desde: " + inicio + "\nHasta: " + fin, "Fecha: " + fecha);
+                                int cupos = 0;
+                                try {
+                                    Object cuposObj = doc.get("cupos");
+                                    if (cuposObj != null) {
+                                        cupos = Integer.parseInt(cuposObj.toString());
+                                    }
+                                } catch (NumberFormatException e) {
+                                    Toast.makeText(this, "Error al parsear cupos para " + placa,
+                                            Toast.LENGTH_SHORT).show();
+                                }
 
-                        cardList.add(card);
+                                CardData card = new CardData(
+                                        documentId, // Pasar el ID
+                                        "Ruta de " + usuario,
+                                        "Hora: " + hora,
+                                        "Placa: " + placa,
+                                        "Desde: " + inicio + "\n\nHasta: " + fin,
+                                        "Fecha: " + fecha,
+                                        cupos
+                                );
+                                cardList.add(card);
+                            }
+
+                            adapter = new CardAdapter(cardList);
+                            recyclerView.setAdapter(adapter);
+                            updateUIVisibility(true);
+
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Error al procesar los datos: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                            updateUIVisibility(false);
+                        }
+                    } else {
+                        Toast.makeText(this, "Error al cargar los datos: " +
+                                task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        updateUIVisibility(false);
                     }
-                    adapter.notifyDataSetChanged();
 
-                    recyclerView.setVisibility(View.VISIBLE);
-                    btnUpdate.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                    new Handler().postDelayed(() -> {
+                        if (btnUpdate != null) {
                             btnUpdate.revertAnimation();
                         }
                     }, 1000);
-                }
-            }
-        });
+                });
+    }
+
+    private void updateUIVisibility(boolean success) {
+        if (success) {
+            recyclerView.setVisibility(View.VISIBLE);
+            btnUpdate.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            btnUpdate.setVisibility(View.VISIBLE);
+        }
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Limpiar referencias
+        adapter = null;
+        db = null;
     }
 }
