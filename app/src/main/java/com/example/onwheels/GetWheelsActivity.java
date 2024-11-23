@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class GetWheelsActivity extends AppCompatActivity {
     private CardAdapter adapter;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private ImageView profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class GetWheelsActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         previous_button = findViewById(R.id.previous_button);
         btnUpdate = findViewById(R.id.btnUpdate);
-
+        profile_image = findViewById(R.id.profile_image);
         recyclerView.setVisibility(View.GONE);
         btnUpdate.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
@@ -80,6 +82,10 @@ public class GetWheelsActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(view -> {
             btnUpdate.startAnimation();
             loadData();
+        });
+
+        profile_image.setOnClickListener(view -> {
+            startActivity(new Intent(GetWheelsActivity.this, AccountInfoActivity.class));
         });
     }
 
