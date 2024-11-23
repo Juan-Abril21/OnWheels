@@ -12,8 +12,6 @@ public class AccountInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_info);
         Button previous_button = findViewById(R.id.previous_button);
-        previous_button.setOnClickListener(view -> {
-            startActivity(new Intent(AccountInfoActivity.this, HomeActivity.class));
-        });
+        previous_button.setOnClickListener(view -> finish());
     }
 }

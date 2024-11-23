@@ -32,13 +32,6 @@ public class HomeActivity extends AppCompatActivity {
         previous_button = findViewById(R.id.previous_button);
         get_wheels_button = findViewById(R.id.get_wheels_button);
         create_wheels_button = findViewById(R.id.create_wheels_button);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        Window window = getWindow();
-        window.setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
 
         profile_image = findViewById(R.id.profile_image);
         profile_image.setOnClickListener(view -> {

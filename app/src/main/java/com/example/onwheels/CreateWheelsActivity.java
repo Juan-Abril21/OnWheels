@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -58,6 +59,7 @@ public class CreateWheelsActivity extends AppCompatActivity {
     int hour, minute;
     private CircularProgressButton create_wheels_button;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private ImageView profile_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,10 @@ public class CreateWheelsActivity extends AppCompatActivity {
         cupos_number_picker.setMinValue(1);
         cupos_number_picker.setMaxValue(7);
         cupos_number_picker.setWrapSelectorWheel(true);
+        profile_image = findViewById(R.id.profile_image);
+        profile_image.setOnClickListener(view -> {
+            startActivity(new Intent(CreateWheelsActivity.this, AccountInfoActivity.class));
+        });
         previous_button.setOnClickListener(view -> {
             startActivity(new Intent(CreateWheelsActivity.this, HomeActivity.class));
         });
