@@ -97,7 +97,7 @@ public class GetWheelsActivity extends AppCompatActivity {
                         try {
                             ArrayList<CardData> cardList = new ArrayList<>();
                             for (QueryDocumentSnapshot doc : task.getResult()) {
-                                String documentId = doc.getId(); 
+                                String documentId = doc.getId();
                                 String placa = doc.getString("placa");
                                 String fecha = doc.getString("fecha");
                                 String hora = doc.getString("hora");
@@ -114,23 +114,26 @@ public class GetWheelsActivity extends AppCompatActivity {
                                 } catch (NumberFormatException e) {
                                     Toast.makeText(this, "Error al parsear cupos para " + placa,
                                             Toast.LENGTH_SHORT).show();
+                                    continue;
+                                }
+                                if (cupos > 0) {
+                                    CardData card = new CardData(
+                                            documentId,
+                                            "Ruta de " + usuario,
+                                            "Hora: " + hora,
+                                            "Placa: " + placa,
+                                            "Desde: " + inicio + "\n\nHasta: " + fin,
+                                            "Fecha: " + fecha,
+                                            cupos
+                                    );
+                                    cardList.add(card);
                                 }
 
-                                CardData card = new CardData(
-                                        documentId, // Pasar el ID
-                                        "Ruta de " + usuario,
-                                        "Hora: " + hora,
-                                        "Placa: " + placa,
-                                        "Desde: " + inicio + "\n\nHasta: " + fin,
-                                        "Fecha: " + fecha,
-                                        cupos
-                                );
-                                cardList.add(card);
                             }
 
                             adapter = new CardAdapter(cardList);
                             recyclerView.setAdapter(adapter);
-                            updateUIVisibility(true);
+                            updateUIVisibility(!cardList.isEmpty());
 
                         } catch (Exception e) {
                             Toast.makeText(this, "Error al procesar los datos: " + e.getMessage(),

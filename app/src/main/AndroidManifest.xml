@@ -55,6 +55,10 @@
             android:name=".AccountInfoActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".ReservationInfo"
+            android:exported="false">
+        </activity>
     </application>
 
 </manifest>

@@ -1,7 +1,7 @@
 package com.example.onwheels;
 
 public class CardData {
-    private String id;  // Añadimos el id del documento
+    private String id;
     private String user;
     private String hora;
     private String placa;
