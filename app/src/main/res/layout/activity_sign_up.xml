@@ -47,7 +47,7 @@
                 android:background="@drawable/rounded_editext"
                 android:drawableLeft="@drawable/baseline_person_24"
                 android:hint="Correo (institucional)"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:padding="8dp"
                 android:drawablePadding="8dp"/>
 

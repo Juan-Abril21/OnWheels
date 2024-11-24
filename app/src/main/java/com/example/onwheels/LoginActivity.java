@@ -80,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                                             // Si no existe, guardar nuevo username
                                                             username = defaultUsername;
                                                             Map<String, Object> user = new HashMap<>();
+                                                            user.put("email", email);
                                                             user.put("username", username);
                                                             user.put("reservations", new ArrayList<>());
 

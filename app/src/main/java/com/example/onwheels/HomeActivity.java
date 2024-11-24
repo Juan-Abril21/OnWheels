@@ -35,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
         profile_image = findViewById(R.id.profile_image);
         profile_image.setOnClickListener(view -> {
+            String usuario = SessionManager.getInstance(HomeActivity.this).getUsername();
             startActivity(new Intent(HomeActivity.this, AccountInfoActivity.class));
         });
         create_wheels_button.setOnClickListener(view -> {

@@ -73,23 +73,10 @@ public class InfoGetWheelsActivity extends AppCompatActivity {
                                                         DocumentSnapshot document = task.getResult();
                                                         if (document.exists()) {
                                                             long updatedCupos = document.getLong("cupos");
-                                                            if (updatedCupos == 0) {
-                                                                db.collection("wheels").document(documentId).delete()
-                                                                        .addOnSuccessListener(aVoid1 -> {
-                                                                            // Agrega reserva al perfil del usuario
-                                                                            reserveWheel(documentId);
-                                                                            Toast.makeText(InfoGetWheelsActivity.this, "Reserva exitosa y registro eliminado", Toast.LENGTH_SHORT).show();
-                                                                            startActivity(new Intent(InfoGetWheelsActivity.this, HomeActivity.class));
-                                                                        })
-                                                                        .addOnFailureListener(e -> {
-                                                                            Toast.makeText(InfoGetWheelsActivity.this, "Error al eliminar el registro", Toast.LENGTH_SHORT).show();
-                                                                            reservar_button.revertAnimation();
-                                                                        });
-                                                            } else {
-                                                                reserveWheel(documentId);
-                                                                Toast.makeText(InfoGetWheelsActivity.this, "Reserva exitosa", Toast.LENGTH_SHORT).show();
-                                                                startActivity(new Intent(InfoGetWheelsActivity.this, HomeActivity.class));
-                                                            }
+
+                                                            reserveWheel(documentId);
+                                                            startActivity(new Intent(InfoGetWheelsActivity.this, HomeActivity.class));
+
                                                         }
                                                     }
                                                 });

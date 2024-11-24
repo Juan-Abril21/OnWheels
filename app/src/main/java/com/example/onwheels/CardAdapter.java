@@ -45,7 +45,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
                     try {
                         Intent intent = new Intent(context, InfoGetWheelsActivity.class);
 
-                        // Pasar el ID del documento
                         intent.putExtra("documentId", data.getId());
                         intent.putExtra("placa", data.getPlaca().replace("Placa: ", ""));
                         intent.putExtra("fecha", data.getFecha().replace("Fecha: ", ""));
