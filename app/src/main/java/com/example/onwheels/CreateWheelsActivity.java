@@ -80,7 +80,7 @@ public class CreateWheelsActivity extends AppCompatActivity {
         create_wheels_button = findViewById(R.id.create_wheels_button);
         cupos_number_picker = findViewById(R.id.cupos_number_picker);
         cupos_number_picker.setMinValue(1);
-        cupos_number_picker.setMaxValue(7);
+        cupos_number_picker.setMaxValue(6);
         cupos_number_picker.setWrapSelectorWheel(true);
         profile_image = findViewById(R.id.profile_image);
         profile_image.setOnClickListener(view -> {
