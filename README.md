@@ -65,8 +65,5 @@ Wheels es una aplicación móvil desarrollada en Java que permite a los usuarios
 5. Abre un Pull Request
 
 ## Contacto
-- Correo: [tu-email@ejemplo.com]
-- GitHub: [tu-usuario-github]
-
-## Licencia
-Este proyecto está bajo la Licencia [NOMBRE DE LA LICENCIA]. Consulta el archivo LICENSE para más detalles.
+- Correo: [jdac149@gmail.com]
+- GitHub: [Juan-Abril21]
