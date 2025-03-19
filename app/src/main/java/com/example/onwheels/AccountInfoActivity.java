@@ -90,7 +90,7 @@ public class AccountInfoActivity extends AppCompatActivity {
                         if (documentSnapshot.exists()) {
                             ReservationData cardData = new ReservationData(
                                     documentSnapshot.getId(),
-                                    documentSnapshot.getString("usuario"),
+                                    String.format("Ruta de %s", documentSnapshot.getString("usuario")),
                                     documentSnapshot.getString("hora"),
                                     documentSnapshot.getString("placa"),
                                     String.format("Desde: %s\nHasta: %s",
